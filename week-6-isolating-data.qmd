@@ -33,7 +33,8 @@ babynames <- read_csv("babynames_500.csv")
 Alter the code to select just the `n` column:
 
 ```{r}
-select(babynames, name, prop)
+#| label: N-column 
+select(babynames, n)
 ```
 
 ## Quiz
@@ -41,9 +42,7 @@ select(babynames, name, prop)
 Which of these is NOT a way to select the `name` and `n` columns together?
 
 ```{r}
-select(babynames, -c(year, sex, prop))
-select(babynames, name:n)
-select(babynames, starts_with("n"))
+#| label: Correct-Answer
 select(babynames, ends_with("n"))
 ```
 
@@ -55,7 +54,9 @@ Use `filter`, `babynames`, and the logical operators to find:
 * All the years the name "Judith" appeared in the top 500 names.    
 
 ```{r}
-
+#| label: prop-name filter
+filter( babynames, prop>= 0.08)
+filter ( babynames, name== "Judith")
 ```
 
 ## Your Turn 3
@@ -67,7 +68,10 @@ Use Boolean operators to return only the rows that contain:
 * Names that are one of Acura, Lexus, or Yugo
 
 ```{r}
-
+#| label: Boolean operators
+filter( babynames, name== "Sue", sex== "M")
+filter( babynames, n== 15 | n== 16, year == 1880)
+filter ( babynames, name %in% c ("Acura", "Lexus", "Yugo"))
 ```
 
 ## Help Me
@@ -76,7 +80,7 @@ What is the smallest value of n?
 What is the largest?
 
 ```{r}
-
+arrange(babynames, n)
 ```
 
 ## Your Turn 4
@@ -88,9 +92,14 @@ Use `%>%` or `|>` to write a sequence of functions that:
 3. Arranges the results so that the most popular names are near the top.
 
 ```{r}
-
-
+#| label: 2023 Filter 
+arrange( select( filter(babynames, 
+                        year == 2023, 
+                        sex == "F"), 
+                 name, n ), desc(n))
 ```
+
+
 
 ## Your Turn 5
 
@@ -101,9 +110,14 @@ Use `%>%` or `|>` to write a sequence of functions that:
 5. Save your graph as "yourname.png" to submit for your preview work.  
 
 ```{r}
-
-
-
+#| label: Rachel
+babynames |> 
+  filter(name == "Rachel", sex == "F") |> 
+  select(year, prop) |> 
+  ggplot() +
+    geom_line(aes(x = year, y = prop)) +
+    labs(title = "Popularity of the name Rachel")
+  ggsave("rachel.png")
 ```
 
 
